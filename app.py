@@ -22,7 +22,7 @@ if not MISTRAL_API_KEY:
 
 st.set_page_config(page_title="ShelfSense 📚", layout="wide", page_icon="📘")
 
-# --- Styling ---
+# Styling 
 st.markdown(
     """
     <style>
@@ -52,9 +52,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# -------------------------
+
 # Helpers
-# -------------------------
+
 def find_col(df, candidates):
     for c in candidates:
         if c in df.columns:
@@ -86,18 +86,15 @@ def load_books(csv_path="FINAL-database.csv"):
 
 books_df = load_books("FINAL-database.csv")
 
-# -------------------------
 # Embedding model
-# -------------------------
+
 @st.cache_resource
 def load_model():
     return SentenceTransformer("all-MiniLM-L6-v2")
 
 model = load_model()
 
-# -------------------------
 # FAISS Index
-# -------------------------
 @st.cache_resource
 def build_local_index(df, _model, emb_file="book_embeddings_local.npy"):
     texts = (
@@ -122,9 +119,8 @@ def build_local_index(df, _model, emb_file="book_embeddings_local.npy"):
 
 faiss_index, book_embeddings = build_local_index(books_df, model)
 
-# -------------------------
 # Search
-# -------------------------
+
 def semantic_search(query, top_k=6, threshold=0.35):
     query_norm = query.strip().lower()
     results_list = []
@@ -155,9 +151,9 @@ def semantic_search(query, top_k=6, threshold=0.35):
     else:
         return pd.DataFrame()
 
-# -------------------------
+
 # Mistral API
-# -------------------------
+
 def ask_mistral(prompt, retries=3, backoff=5):
     headers = {
         "Authorization": f"Bearer {MISTRAL_API_KEY}",
@@ -192,9 +188,8 @@ def summarize_book(title):
         return "❌ No description found to summarize."
     return ask_mistral(f"Summarize the following book description in 4 short sentences:\n\n{desc}")
 
-# -------------------------
 # UI
-# -------------------------
+
 st.sidebar.title("📚 ShelfSense")
 st.sidebar.markdown("Your AI-powered library assistant.")
 user_question = st.sidebar.text_input("Ask the Library Bot:")
@@ -206,9 +201,9 @@ if user_question:
 st.title("✨ Welcome to ShelfSense")
 tabs = st.tabs(["🔍 Search Books", "📖 Summarize Book", "📔 Suggest by Category"])
 
-# -------------------------
+
 # TAB 1 - Search Books
-# -------------------------
+
 with tabs[0]:
     st.header("🔍 Search for a Book")
     search_query = st.text_input("Enter your search query:")
@@ -235,9 +230,8 @@ with tabs[0]:
                         unsafe_allow_html=True,
                     )
 
-# -------------------------
 # TAB 2 - Summarize Book
-# -------------------------
+
 with tabs[1]:
     st.header("📖 Summarize a Book")
     book_name = st.text_input("Enter book name to summarize:")
@@ -246,9 +240,9 @@ with tabs[1]:
             summary = summarize_book(book_name)
         st.success(summary)
 
-# -------------------------
+
 # TAB 3 - Suggest by Category
-# -------------------------
+
 with tabs[2]:
     st.header("📔 Suggest Books by Category")
     all_categories = []
@@ -278,4 +272,5 @@ with tabs[2]:
             st.info("No books found for the selected categories.")
     else:
         st.info("👉 Select one or more categories from the dropdown to see suggestions.")
+
 
