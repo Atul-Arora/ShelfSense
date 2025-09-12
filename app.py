@@ -9,9 +9,6 @@ from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 import time
 
-# -------------------------
-# Load environment variables
-# -------------------------
 load_dotenv()
 
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
@@ -21,9 +18,8 @@ if not MISTRAL_API_KEY:
     st.error("❌ Missing Mistral API key. Please set MISTRAL_API_KEY in your environment.")
     st.stop()
 
-# -------------------------
 # Page config
-# -------------------------
+
 st.set_page_config(page_title="ShelfSense 📚", layout="wide", page_icon="📘")
 
 # --- Styling ---
@@ -282,3 +278,4 @@ with tabs[2]:
             st.info("No books found for the selected categories.")
     else:
         st.info("👉 Select one or more categories from the dropdown to see suggestions.")
+
