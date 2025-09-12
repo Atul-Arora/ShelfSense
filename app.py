@@ -10,15 +10,20 @@ from sentence_transformers import SentenceTransformer
 import time
 
 # -------------------------
-# Mistral Config (hardcoded API key)
+# Load environment variables
 # -------------------------
-MISTRAL_API_KEY = "Zy0WiGJ9kVdLYEhhOyzX2i691bQwCGid"
-MISTRAL_CHAT_ENDPOINT = "https://api.mistral.ai/v1/chat/completions"
-
-# Load .env
 load_dotenv()
 
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+MISTRAL_CHAT_ENDPOINT = "https://api.mistral.ai/v1/chat/completions"
+
+if not MISTRAL_API_KEY:
+    st.error("❌ Missing Mistral API key. Please set MISTRAL_API_KEY in your environment.")
+    st.stop()
+
+# -------------------------
 # Page config
+# -------------------------
 st.set_page_config(page_title="ShelfSense 📚", layout="wide", page_icon="📘")
 
 # --- Styling ---
