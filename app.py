@@ -186,7 +186,7 @@ def summarize_book(title):
     desc = book.iloc[0].get("Description", "")
     if not desc:
         return "❌ No description found to summarize."
-    return ask_mistral(f"Summarize the following book description in 4 short sentences also suggest one book based on this :\n\n{desc}")
+    return ask_mistral(f"Summarize the following book description in 4 short sentences also suggest what book to read after this :\n\n{desc}")
 
 # UI
 
@@ -272,6 +272,7 @@ with tabs[2]:
             st.info("No books found for the selected categories.")
     else:
         st.info("👉 Select one or more categories from the dropdown to see suggestions.")
+
 
 
 
